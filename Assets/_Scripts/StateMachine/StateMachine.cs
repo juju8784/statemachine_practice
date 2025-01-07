@@ -11,11 +11,13 @@ public abstract class StateMachine<EState> : MonoBehaviour where EState : Enum
 
     protected bool IsTransitioningState = false;
 
-    void Start() {
+    protected void Start() {
         CurrentState.EnterState();
     }
 
-    void Update() {
+    protected void Update() {
+        //For now, the states will determine what state they go to next
+        //in the future, it should send information to the SM and then the SM will decide
         EState nextStateKey = CurrentState.GetNextState();
 
         //To make sure we aren't transitioning states
@@ -24,7 +26,6 @@ public abstract class StateMachine<EState> : MonoBehaviour where EState : Enum
             if (nextStateKey.Equals(CurrentState.StateKey))
             {
                 CurrentState.UpdateState();
-
             }
             else
             {
@@ -33,7 +34,7 @@ public abstract class StateMachine<EState> : MonoBehaviour where EState : Enum
         }
     }
 
-    public void TransitionToState(EState stateKey)
+    protected void TransitionToState(EState stateKey)
     {
         IsTransitioningState = true;
         CurrentState.ExitState();
@@ -42,15 +43,15 @@ public abstract class StateMachine<EState> : MonoBehaviour where EState : Enum
         IsTransitioningState = false;
     }
 
-    void OnTriggerEnter(Collider other) {
+    protected void OnTriggerEnter(Collider other) {
         CurrentState.OnTriggerEnter(other);
     }
 
-    void OnTriggerStay(Collider other) {
+    protected void OnTriggerStay(Collider other) {
         CurrentState.OnTriggerStay(other);
     }
 
-    void OnTriggerExit(Collider other) {
+    protected void OnTriggerExit(Collider other) {
         CurrentState.OnTriggerExit(other);
     }
 }
